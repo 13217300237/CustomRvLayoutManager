@@ -1,4 +1,4 @@
-package study.hank.com.myapplication2;
+package study.hank.com.myapplication2.custom;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -34,13 +34,14 @@ public class CustomRvLayoutManager extends RecyclerView.LayoutManager {
         // 第二步：制定子view的排布规则
         final int itemCount = getItemCount();//原来这个getItemCount，是Rv的adapter的那个getItemCount
         //对比 getChildCount- 它是当前附加在Rv上可见的子view个数,在你布局之前，附加在Rv上的子view个数一定是0，所以这里不要用getChildCount
-        int currentLevel;//层级，影响子view的缩放倍率
+        int currentLevel;//层级，影响子view的缩放倍率和Y偏移量
         //那就以最后4个为准了
         int startIndex = itemCount - RvAnimationConst.maxShownChildCount;
         for (int i = startIndex; i < itemCount; i++) {
-            //从recycler中获取子view，因为子view已经被Recycler统筹管理
-            View child = recycler.getViewForPosition(i);
+
+            View child = recycler.getViewForPosition(i);//从recycler中获取子view，因为子view已经被Recycler统筹管理
             addView(child);//加入到LayoutManager中
+
             //对子view进行测量（带margin）
             measureChildWithMargins(child, 0, 0);//既然 要layoutChild，那么在layout之前要先measure
             //拿到子View的宽高

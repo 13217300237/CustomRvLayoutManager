@@ -2,6 +2,7 @@ package study.hank.com.myapplication2.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,12 +42,19 @@ public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapt
     }
 
     public final CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d("RecyclerViewUniversal","onCreateViewHolder");
         CustomViewHolder viewHolder = CustomViewHolder.get(this.mContext, (View) null, parent, this.mLayoutId);
         if (null == this.mRv) {
             this.mRv = parent;
         }
 
         return viewHolder;
+    }
+
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
+        Log.d("RecyclerViewUniversal","onBindViewHolder");
+        this.setListener(position, holder);
+        this.convert(holder, this.mDatas.get(position));
     }
 
     protected final int getPosition(android.support.v7.widget.RecyclerView.ViewHolder viewHolder) {
@@ -85,10 +93,6 @@ public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapt
         }
     }
 
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        this.setListener(position, holder);
-        this.convert(holder, this.mDatas.get(position));
-    }
 
     protected void setListener(final int position, final CustomViewHolder viewHolder) {
         if (this.isEnabled(this.getItemViewType(position))) {

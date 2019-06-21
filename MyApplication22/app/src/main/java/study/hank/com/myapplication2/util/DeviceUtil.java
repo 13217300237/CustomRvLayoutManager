@@ -1,4 +1,4 @@
-package study.hank.com.myapplication2;
+package study.hank.com.myapplication2.util;
 
 import android.app.Activity;
 import android.content.Context;

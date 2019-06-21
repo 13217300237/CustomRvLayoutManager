@@ -1,6 +1,8 @@
-package study.hank.com.myapplication2;
+package study.hank.com.myapplication2.custom;
 
 import android.content.Context;
+
+import study.hank.com.myapplication2.util.DeviceUtil;
 
 public class RvAnimationConst {
     public static int maxShownChildCount;//最多叠放4个,其他的不计算在内

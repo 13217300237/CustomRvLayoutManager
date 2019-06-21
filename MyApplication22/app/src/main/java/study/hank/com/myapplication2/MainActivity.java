@@ -12,44 +12,71 @@ import java.util.List;
 
 import study.hank.com.myapplication2.adapter.CustomViewHolder;
 import study.hank.com.myapplication2.adapter.RecyclerViewUniversalAdapter;
+import study.hank.com.myapplication2.custom.CustomItemTouchCallback;
+import study.hank.com.myapplication2.custom.CustomRvLayoutManager;
+import study.hank.com.myapplication2.custom.DataBean;
+import study.hank.com.myapplication2.custom.RvAnimationConst;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerViewUniversalAdapter adapter;
-    TextView tvRes;
-    RecyclerView rv;
-    List<DataBean> dataBeans;
+    private RecyclerViewUniversalAdapter adapter;
+    private TextView tvRes;
+    private RecyclerView rv;
+    private List<DataBean> dataBeans;
+    private CustomItemTouchCallback customItemTouchCallback;
+    private ItemTouchHelper touchHelper;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         tvRes = findViewById(R.id.tv_res);
         rv = findViewById(R.id.rv);
 
-        RvAnimationConst.init(this);//初始化相关参数
+        RvAnimationConst.init(this);//初始化相关参数,我纯粹自定义的
 
-        //子view的排布的实现全都在LayoutManager的实现方法 onChildLayout里
-        rv.setLayoutManager(new CustomRvLayoutManager(this));
         initData();//Rv的数据
-        initAdapter();
-        rv.setAdapter(adapter);
+        initAdapter();//Rv的适配器
+        initItemTouchCallback();//Rv的item触摸反馈事件
+        initLayoutManager();//Rv的布局管理器
 
-        CustomItemTouchCallback customItemTouchCallback = new CustomItemTouchCallback(rv, adapter, dataBeans);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(customItemTouchCallback);
+        // 4个准备工作都做好了
+        initRv();//rv初始化
+    }
+
+    private void initRv() {
+        if (layoutManager == null) throw new RuntimeException("ERROR：layoutManager is null!");
+        if (adapter == null) throw new RuntimeException("ERROR：adapter is null!");
+        if (touchHelper == null) throw new RuntimeException("ERROR：touchHelper is null!");
+
+        rv.setLayoutManager(layoutManager);
+        rv.setAdapter(adapter);
+        touchHelper.attachToRecyclerView(rv);//给rv加上滑动事件
+    }
+
+    private void initLayoutManager() {
+        //子view的排布的实现全都在LayoutManager的实现方法 onChildLayout里
+        layoutManager = new CustomRvLayoutManager(this);
+    }
+
+    private void initItemTouchCallback() {
+        //子view的触摸反馈事件，都在CustomItemTouchCallback中
+        customItemTouchCallback = new CustomItemTouchCallback(rv, adapter, dataBeans);
         customItemTouchCallback.setCallback(new CustomItemTouchCallback.LikeOrDislikeCallback() {
             @Override
             public void call(boolean ifLike, String who) {
                 tvRes.setText(ifLike ? "喜欢  " + who : "不喜欢  " + who);
             }
         });
-        touchHelper.attachToRecyclerView(rv);//给rv加上滑动事件
+        touchHelper = new ItemTouchHelper(customItemTouchCallback);
     }
 
     private void initData() {
         dataBeans = new ArrayList<>();
         DataBean temp;
-        for (int i = 0; i < DataManager.dataCount; i++) {
+        for (int i = 0; i < DataManager.dataCount; i++) {//制造模拟数据
             temp = new DataBean();
             temp.name = DataManager.getGirlName(i);
             temp.index = i;
@@ -57,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 使用万能RvAdapter，来节省代码量
+     */
     private void initAdapter() {
         adapter = new RecyclerViewUniversalAdapter<DataBean>(this, dataBeans, R.layout.item_data) {
             @Override
@@ -75,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
      * 学学RecyclerView的写法，弄个内部类
      */
     private static class DataManager {
+
         private static final int dataCount = 10;
 
         private static int getBgColorByIndex(int index) {

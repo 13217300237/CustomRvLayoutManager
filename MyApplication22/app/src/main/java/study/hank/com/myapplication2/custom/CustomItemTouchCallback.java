@@ -1,4 +1,4 @@
-package study.hank.com.myapplication2;
+package study.hank.com.myapplication2.custom;
 
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import study.hank.com.myapplication2.R;
 import study.hank.com.myapplication2.adapter.CustomViewHolder;
 
 /**
