@@ -6,9 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
+import study.hank.com.myapplication2.adapter.CustomViewHolder;
+
+/**
+ * 统筹管理Item的各种点击拖拽效果
+ */
 public class CustomItemTouchCallback extends ItemTouchHelper.SimpleCallback {
 
     RecyclerView rv;
@@ -39,7 +45,7 @@ public class CustomItemTouchCallback extends ItemTouchHelper.SimpleCallback {
     }
 
     /**
-     * Called when a ViewHolder is swiped by the user.
+     * Called when a CustomViewHolder is swiped by the user.
      * 滑动逻辑核心:item滑出去之后执行
      *
      * @param viewHolder
@@ -70,25 +76,26 @@ public class CustomItemTouchCallback extends ItemTouchHelper.SimpleCallback {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
         //问题来了，为什么要重写这个方法呢？ 因为我们要在拖动的时候，让子view发生一些变化
-//        先按照老师的效果写一遍
-        float maxDistanceX = recyclerView.getWidth() * 0.5f;//你这里算错了吧，如果是对角线的话，那就全都用对角线来做
+        float maxDistanceX = recyclerView.getWidth() * 0.5f;
         float maxDistanceY = recyclerView.getHeight() * 0.5f;
-        float maxDistance = (float) Math.sqrt(maxDistanceX * maxDistanceX + maxDistanceY * maxDistanceY);
+        float maxDistance = (float) Math.sqrt(maxDistanceX * maxDistanceX + maxDistanceY * maxDistanceY);//计算对角线最大长度
 
         float distance = (float) Math.sqrt(dX * dX + dY * dY);//dx和dy是横竖方向的移动距离，现在算出直接的移动距离，勾股定理，开方
         float fraction = distance / maxDistance;//这是，当前移动的比例
-        if (fraction > 1)//
+        if (fraction > 1)//防止意外情况
             fraction = 1;
-        Log.d("fraction", fraction + "");
-
-        //如何判断是向左还是向右,X
-        Log.d("fraction_dX", dX + "");
-        if (callback != null)
-            callback.call(dX < 0);//向左负数，喜欢，向右不喜欢
 
         int count = recyclerView.getChildCount();//这是啥？这是recyclerView这个容器里面的当前子view个数
         //我在滑动的时候，会触发invalidate，从而触发这个onChildDraw，引起子view的一些实时变化
-
+        if (callback != null) {
+            //当前，最上层的是
+            View child = recyclerView.getLayoutManager().getChildAt(RvAnimationConst.maxShownChildCount - 1);// 获得最上面的子view
+            CustomViewHolder vh = (CustomViewHolder) recyclerView.getChildViewHolder(child);
+            // 我应该可以从自定义viewHolder中去获取
+            TextView textView = vh.getView(R.id.tv_name);
+            String who = (String) textView.getText();
+            callback.call(dX < 0, who);//向左负数，喜欢，向右正数不喜欢
+        }
         //也要根据层级来进行不同程度的缩放，这个全看效果想如何设计了
         for (int i = 0; i < count; i++) {
             View child = recyclerView.getChildAt(i);
@@ -121,7 +128,7 @@ public class CustomItemTouchCallback extends ItemTouchHelper.SimpleCallback {
 
     //给它加上一个回调，将向左向右的事件传递出去
     public interface LikeOrDislikeCallback {
-        void call(boolean ifLike);
+        void call(boolean ifLike, String who);
     }
 
     LikeOrDislikeCallback callback;

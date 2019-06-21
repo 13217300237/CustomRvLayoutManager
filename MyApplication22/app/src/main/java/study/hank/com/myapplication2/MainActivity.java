@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import study.hank.com.myapplication2.adapter.CustomViewHolder;
 import study.hank.com.myapplication2.adapter.RecyclerViewUniversalAdapter;
-import study.hank.com.myapplication2.adapter.ViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,14 +32,15 @@ public class MainActivity extends AppCompatActivity {
         //子view的排布的实现全都在LayoutManager的实现方法 onChildLayout里
         rv.setLayoutManager(new CustomRvLayoutManager(this));
         initData();//Rv的数据
-        rv.setAdapter(initAdapter());
+        initAdapter();
+        rv.setAdapter(adapter);
 
         CustomItemTouchCallback customItemTouchCallback = new CustomItemTouchCallback(rv, adapter, dataBeans);
         ItemTouchHelper touchHelper = new ItemTouchHelper(customItemTouchCallback);
         customItemTouchCallback.setCallback(new CustomItemTouchCallback.LikeOrDislikeCallback() {
             @Override
-            public void call(boolean ifLike) {
-                tvRes.setText(ifLike ? "喜欢" : "不喜欢");
+            public void call(boolean ifLike, String who) {
+                tvRes.setText(ifLike ? "喜欢  " + who : "不喜欢  " + who);
             }
         });
         touchHelper.attachToRecyclerView(rv);//给rv加上滑动事件
@@ -56,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private RecyclerViewUniversalAdapter<DataBean> initAdapter() {
-        return new RecyclerViewUniversalAdapter<DataBean>(this, dataBeans, R.layout.item_data) {
+    private void initAdapter() {
+        adapter = new RecyclerViewUniversalAdapter<DataBean>(this, dataBeans, R.layout.item_data) {
             @Override
-            public void convert(ViewHolder viewHolder, DataBean data) {
+            public void convert(CustomViewHolder viewHolder, DataBean data) {
                 viewHolder.setText(R.id.tv_name, data.name);
                 viewHolder.setText(R.id.tv_index, data.index + "");
                 viewHolder.setImageDrawable(R.id.iv_girl, getResources().getDrawable(DataManager.getGirlImg(data.index)));

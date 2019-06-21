@@ -20,22 +20,22 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class CustomViewHolder extends RecyclerView.ViewHolder {
     private SparseArray<View> mViews = new SparseArray();
     private int mLayoutId;
 
-    public ViewHolder(View itemView) {
+    public CustomViewHolder(View itemView) {
         super(itemView);
     }
 
-    public static ViewHolder get(Context context, View convertView, ViewGroup parent, int layoutId) {
+    public static CustomViewHolder get(Context context, View convertView, ViewGroup parent, int layoutId) {
         if (convertView == null) {
             View holder2 = LayoutInflater.from(context).inflate(layoutId, parent, false);
-            ViewHolder holder1 = new ViewHolder(holder2);
+            CustomViewHolder holder1 = new CustomViewHolder(holder2);
             holder1.mLayoutId = layoutId;
             return holder1;
         } else {
-            ViewHolder holder = (ViewHolder) convertView.getTag();
+            CustomViewHolder holder = (CustomViewHolder) convertView.getTag();
             return holder;
         }
     }
@@ -54,62 +54,62 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return (T) view;
     }
 
-    public ViewHolder setText(int viewId, CharSequence text) {
+    public CustomViewHolder setText(int viewId, CharSequence text) {
         TextView tv = (TextView) this.getView(viewId);
         tv.setText(text);
         return this;
     }
 
-    public ViewHolder setSelected(int viewId, boolean selected) {
+    public CustomViewHolder setSelected(int viewId, boolean selected) {
         View v = this.getView(viewId);
         v.setSelected(selected);
         return this;
     }
 
-    public ViewHolder setImageResource(int viewId, int resId) {
+    public CustomViewHolder setImageResource(int viewId, int resId) {
         ImageView view = (ImageView) this.getView(viewId);
         view.setImageResource(resId);
         return this;
     }
 
-    public ViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
+    public CustomViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView view = (ImageView) this.getView(viewId);
         view.setImageBitmap(bitmap);
         return this;
     }
 
-    public ViewHolder setImageDrawable(int viewId, Drawable drawable) {
+    public CustomViewHolder setImageDrawable(int viewId, Drawable drawable) {
         ImageView view = (ImageView) this.getView(viewId);
         view.setImageDrawable(drawable);
         return this;
     }
 
-    public ViewHolder setBackgroundColor(int viewId, int color) {
+    public CustomViewHolder setBackgroundColor(int viewId, int color) {
         View view = this.getView(viewId);
         view.setBackgroundColor(color);
         return this;
     }
 
-    public ViewHolder setBackgroundRes(int viewId, int backgroundRes) {
+    public CustomViewHolder setBackgroundRes(int viewId, int backgroundRes) {
         View view = this.getView(viewId);
         view.setBackgroundResource(backgroundRes);
         return this;
     }
 
-    public ViewHolder setTextColor(int viewId, int textColor) {
+    public CustomViewHolder setTextColor(int viewId, int textColor) {
         TextView view = (TextView) this.getView(viewId);
         view.setTextColor(textColor);
         return this;
     }
 
-    public ViewHolder setTextColorRes(int viewId, int textColorRes) {
+    public CustomViewHolder setTextColorRes(int viewId, int textColorRes) {
         TextView view = (TextView) this.getView(viewId);
         view.setTextColor(this.itemView.getContext().getResources().getColor(textColorRes));
         return this;
     }
 
     @SuppressLint({"NewApi"})
-    public ViewHolder setAlpha(int viewId, float value) {
+    public CustomViewHolder setAlpha(int viewId, float value) {
         if (Build.VERSION.SDK_INT >= 11) {
             this.getView(viewId).setAlpha(value);
         } else {
@@ -122,19 +122,19 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder setVisible(int viewId, boolean visible) {
+    public CustomViewHolder setVisible(int viewId, boolean visible) {
         View view = this.getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
     }
 
-    public ViewHolder linkify(int viewId) {
+    public CustomViewHolder linkify(int viewId) {
         TextView view = (TextView) this.getView(viewId);
         Linkify.addLinks(view, Linkify.ALL);
         return this;
     }
 
-    public ViewHolder setTypeface(Typeface typeface, int... viewIds) {
+    public CustomViewHolder setTypeface(Typeface typeface, int... viewIds) {
         int[] var3 = viewIds;
         int var4 = viewIds.length;
 
@@ -148,69 +148,69 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder setProgress(int viewId, int progress) {
+    public CustomViewHolder setProgress(int viewId, int progress) {
         ProgressBar view = (ProgressBar) this.getView(viewId);
         view.setProgress(progress);
         return this;
     }
 
-    public ViewHolder setProgress(int viewId, int progress, int max) {
+    public CustomViewHolder setProgress(int viewId, int progress, int max) {
         ProgressBar view = (ProgressBar) this.getView(viewId);
         view.setMax(max);
         view.setProgress(progress);
         return this;
     }
 
-    public ViewHolder setMax(int viewId, int max) {
+    public CustomViewHolder setMax(int viewId, int max) {
         ProgressBar view = (ProgressBar) this.getView(viewId);
         view.setMax(max);
         return this;
     }
 
-    public ViewHolder setRating(int viewId, float rating) {
+    public CustomViewHolder setRating(int viewId, float rating) {
         RatingBar view = (RatingBar) this.getView(viewId);
         view.setRating(rating);
         return this;
     }
 
-    public ViewHolder setRating(int viewId, float rating, int max) {
+    public CustomViewHolder setRating(int viewId, float rating, int max) {
         RatingBar view = (RatingBar) this.getView(viewId);
         view.setMax(max);
         view.setRating(rating);
         return this;
     }
 
-    public ViewHolder setTag(int viewId, Object tag) {
+    public CustomViewHolder setTag(int viewId, Object tag) {
         View view = this.getView(viewId);
         view.setTag(tag);
         return this;
     }
 
-    public ViewHolder setTag(int viewId, int key, Object tag) {
+    public CustomViewHolder setTag(int viewId, int key, Object tag) {
         View view = this.getView(viewId);
         view.setTag(key, tag);
         return this;
     }
 
-    public ViewHolder setChecked(int viewId, boolean checked) {
+    public CustomViewHolder setChecked(int viewId, boolean checked) {
         Checkable view = (Checkable) this.getView(viewId);
         view.setChecked(checked);
         return this;
     }
 
-    public ViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
+    public CustomViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = this.getView(viewId);
         view.setOnClickListener(listener);
         return this;
     }
 
-    public ViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
+    public CustomViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
         View view = this.getView(viewId);
         view.setOnTouchListener(listener);
         return this;
     }
 
-    public ViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+    public CustomViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
         View view = this.getView(viewId);
         view.setOnLongClickListener(listener);
         return this;

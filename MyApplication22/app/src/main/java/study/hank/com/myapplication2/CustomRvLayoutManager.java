@@ -73,24 +73,20 @@ public class CustomRvLayoutManager extends RecyclerView.LayoutManager {
                             + "-" + (heightSpace + childHeight));
 
             //然后让子view进行适当缩小
-//            计算偏移值，越往上，越大，也就是说，最底下的是层级最低的
+            //计算偏移值，越往上，越大，也就是说，最底下的是层级最低的
             //打印出每个level的缩放倍率和y平移距离
             currentLevel = itemCount - i - 1;
-            Log.d("currentLevel", currentLevel + "");
 
             if (currentLevel > 0) {
                 if (currentLevel >= RvAnimationConst.maxShownChildCount - 1)//如果是最后一个item，则让它和倒数第二个重叠（缩放倍率和Y平移量一样）
                     currentLevel--;
 
                 float currentScaleOffset = RvAnimationConst.scaleOffset * currentLevel;
-                Log.d("currentLevel", (1 - currentScaleOffset) + "");
                 child.setScaleX(1 - currentScaleOffset);
                 child.setScaleY(1 - currentScaleOffset);
                 child.setTranslationY(RvAnimationConst.baseYTransOffset * currentLevel);
-            }
+            } // 但是我不想所有的数据都叠起来，因为最多看见那么几个，没必要全都叠放，那就最多放4个
         }
-        // 但是我不想所有的数据都叠起来，因为最多看见那么几个，没必要全都叠放，那就最多放4个
-
 
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @param <T>
  */
-public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
+public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapter<CustomViewHolder> {
     protected Context mContext;
     protected int mLayoutId;
     protected List<T> mDatas;
@@ -40,8 +40,8 @@ public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapt
         this.mDatas = datas;
     }
 
-    public final ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = ViewHolder.get(this.mContext, (View) null, parent, this.mLayoutId);
+    public final CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        CustomViewHolder viewHolder = CustomViewHolder.get(this.mContext, (View) null, parent, this.mLayoutId);
         if (null == this.mRv) {
             this.mRv = parent;
         }
@@ -61,7 +61,7 @@ public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapt
      * @deprecated
      */
     @Deprecated
-    protected void setListener(final ViewGroup parent, final ViewHolder viewHolder, int viewType) {
+    protected void setListener(final ViewGroup parent, final CustomViewHolder viewHolder, int viewType) {
         if (this.isEnabled(viewType)) {
             viewHolder.itemView.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -85,12 +85,12 @@ public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapt
         }
     }
 
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
         this.setListener(position, holder);
         this.convert(holder, this.mDatas.get(position));
     }
 
-    protected void setListener(final int position, final ViewHolder viewHolder) {
+    protected void setListener(final int position, final CustomViewHolder viewHolder) {
         if (this.isEnabled(this.getItemViewType(position))) {
             viewHolder.itemView.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -114,7 +114,7 @@ public abstract class RecyclerViewUniversalAdapter<T> extends RecyclerView.Adapt
     }
 
     // 将 var2的数据 显示在ViewHolder 的对应 View 中
-    public abstract void convert(ViewHolder viewHolder, T data);
+    public abstract void convert(CustomViewHolder viewHolder, T data);
 
     public int getItemCount() {
         return this.mDatas != null ? this.mDatas.size() : 0;
