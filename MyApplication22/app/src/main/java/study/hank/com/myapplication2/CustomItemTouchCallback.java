@@ -88,10 +88,8 @@ public class CustomItemTouchCallback extends ItemTouchHelper.SimpleCallback {
         int count = recyclerView.getChildCount();//这是啥？这是recyclerView这个容器里面的当前子view个数
         //我在滑动的时候，会触发invalidate，从而触发这个onChildDraw，引起子view的一些实时变化
         if (callback != null) {
-            //当前，最上层的是
             View child = recyclerView.getLayoutManager().getChildAt(RvAnimationConst.maxShownChildCount - 1);// 获得最上面的子view
             CustomViewHolder vh = (CustomViewHolder) recyclerView.getChildViewHolder(child);
-            // 我应该可以从自定义viewHolder中去获取
             TextView textView = vh.getView(R.id.tv_name);
             String who = (String) textView.getText();
             callback.call(dX < 0, who);//向左负数，喜欢，向右正数不喜欢
